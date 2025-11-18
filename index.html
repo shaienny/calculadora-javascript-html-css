@@ -120,36 +120,31 @@
             document.addEventListener("keydown", function(event) {
                 let tecla = event.key; 
 
-                // Número
                 if (!isNaN(tecla)) {
                     insert(tecla);
                 }
 
-                // Operadores
                 else if (tecla === "+" || tecla === "-" || tecla === "*" || tecla === "/") {
                     insert(tecla);
                 }
 
-                // Ponto
                 else if (tecla === ".") {
                     insert(".");
                 }
 
-                // Backspace
                 else if (tecla === "Backspace") {
                     back();
                 }
 
-                // Enter = calcular
                 else if (tecla === "Enter") {
                     event.preventDefault(); // evita recarregar a página
                     calcular();
                 }
 
                 else if (tecla === "Escape") {
-                    tela.value = "";
-                    return;
+                    clean(); /
                 }
+
             });
             
         </script>
