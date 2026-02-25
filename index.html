@@ -111,7 +111,7 @@ button:active{
 
 <div class="calculadora">
     <div class="titulo">Calculadora</div>
-    <input type="text" id="resultado" disabled>
+    <input type="text" id="resultado" onkeydown="teclado(event)">
 
     <div class="botoes">
         <button class="operador" onclick="clean()">C</button>
