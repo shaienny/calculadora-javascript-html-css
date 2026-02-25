@@ -108,7 +108,7 @@ button:active{
 
 <div class="calculadora">
     <div class="titulo">Calculadora</div>
-    <input type="text" id="resultado">
+    <input type="text" id="resultado" autofocus>
 
     <div class="botoes">
         <button class="operador" onclick="clean()">C</button>
@@ -141,14 +141,17 @@ const resultado = document.getElementById("resultado");
 
 function insert(valor){
     resultado.value += valor;
+    resultado.focus();
 }
 
 function clean(){
     resultado.value = "";
+    resultado.focus();
 }
 
 function back(){
     resultado.value = resultado.value.slice(0, -1);
+    resultado.focus();
 }
 
 function calcular(){
@@ -160,10 +163,11 @@ function calcular(){
             resultado.value = "Erro";
         }
     }
+    resultado.focus();
 }
 
-// SUPORTE COMPLETO AO TECLADO
-resultado.addEventListener("keydown", function(event){
+// EVENTO GLOBAL DE TECLADO
+document.addEventListener("keydown", function(event){
 
     const tecla = event.key;
 
@@ -174,14 +178,14 @@ resultado.addEventListener("keydown", function(event){
         return;
     }
 
-    // ESC = LIMPAR TUDO
+    // ESC = LIMPAR
     if(tecla === "Escape"){
         event.preventDefault();
         clean();
         return;
     }
 
-    // Permitir números (inclusive numpad)
+    // Permitir números
     if(!isNaN(tecla)) return;
 
     // Permitir operadores
@@ -191,7 +195,9 @@ resultado.addEventListener("keydown", function(event){
     if(tecla === "Backspace") return;
 
     // Bloquear qualquer outra tecla
-    event.preventDefault();
+    if(document.activeElement === resultado){
+        event.preventDefault();
+    }
 });
 </script>
 
