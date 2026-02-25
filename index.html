@@ -139,19 +139,43 @@ button:active{
 <script>
 const resultado = document.getElementById("resultado");
 
+function ultimoCaractere(){
+    return resultado.value.slice(-1);
+}
+
+function ehOperador(valor){
+    return ["+", "-", "*", "/"].includes(valor);
+}
+
 function insert(valor){
+
+    let atual = resultado.value;
+    let ultimo = ultimoCaractere();
+
+    // Não permitir começar com * ou /
+    if(atual === "" && (valor === "*" || valor === "/")){
+        return;
+    }
+
+    // Não permitir dois operadores seguidos
+    if(ehOperador(valor) && ehOperador(ultimo)){
+        return;
+    }
+
+    // Não permitir dois pontos seguidos
+    if(valor === "." && ultimo === "."){
+        return;
+    }
+
     resultado.value += valor;
-    resultado.focus();
 }
 
 function clean(){
     resultado.value = "";
-    resultado.focus();
 }
 
 function back(){
     resultado.value = resultado.value.slice(0, -1);
-    resultado.focus();
 }
 
 function calcular(){
@@ -163,38 +187,33 @@ function calcular(){
             resultado.value = "Erro";
         }
     }
-    resultado.focus();
 }
 
-// EVENTO GLOBAL DE TECLADO
+// TECLADO GLOBAL
 document.addEventListener("keydown", function(event){
 
     const tecla = event.key;
 
-    // ENTER = IGUAL
     if(tecla === "Enter"){
         event.preventDefault();
         calcular();
         return;
     }
 
-    // ESC = LIMPAR
     if(tecla === "Escape"){
         event.preventDefault();
         clean();
         return;
     }
 
-    // Permitir números
-    if(!isNaN(tecla)) return;
-
-    // Permitir operadores
-    if(["+", "-", "*", "/", "."].includes(tecla)) return;
-
-    // Permitir backspace
     if(tecla === "Backspace") return;
 
-    // Bloquear qualquer outra tecla
+    if(!isNaN(tecla) || ["+", "-", "*", "/", "."].includes(tecla)){
+        event.preventDefault();
+        insert(tecla);
+        return;
+    }
+
     if(document.activeElement === resultado){
         event.preventDefault();
     }
