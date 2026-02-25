@@ -15,12 +15,8 @@
     font-family: 'Poppins', sans-serif;
 }
 
-html, body{
-    width: 100%;
-    height: 100%;
-}
-
 body{
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,6 +55,7 @@ body{
     background: linear-gradient(145deg, #ffffff, #f3e8ff);
     color: #4a0072;
     box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);
+    outline: none;
 }
 
 .botoes{
@@ -111,7 +108,7 @@ button:active{
 
 <div class="calculadora">
     <div class="titulo">Calculadora</div>
-    <input type="text" id="resultado" onkeydown="teclado(event)">
+    <input type="text" id="resultado">
 
     <div class="botoes">
         <button class="operador" onclick="clean()">C</button>
@@ -140,31 +137,55 @@ button:active{
 </div>
 
 <script>
+const resultado = document.getElementById("resultado");
+
 function insert(valor){
-    document.getElementById("resultado").value += valor;
+    resultado.value += valor;
 }
 
 function clean(){
-    document.getElementById("resultado").value = "";
+    resultado.value = "";
 }
 
 function back(){
-    let resultado = document.getElementById("resultado").value;
-    document.getElementById("resultado").value = resultado.slice(0, -1);
+    resultado.value = resultado.value.slice(0, -1);
 }
 
 function calcular(){
-    let resultado = document.getElementById("resultado").value;
-
-    if(resultado){
+    if(resultado.value){
         try{
-            document.getElementById("resultado").value =
-            Function('"use strict"; return (' + resultado + ')')();
+            resultado.value =
+            Function('"use strict"; return (' + resultado.value + ')')();
         }catch{
-            document.getElementById("resultado").value = "Erro";
+            resultado.value = "Erro";
         }
     }
 }
+
+// SUPORTE AO TECLADO
+resultado.addEventListener("keydown", function(event){
+
+    const tecla = event.key;
+
+    // Permitir números
+    if(!isNaN(tecla)) return;
+
+    // Permitir operadores
+    if(["+", "-", "*", "/", "."].includes(tecla)) return;
+
+    // Enter calcula
+    if(tecla === "Enter"){
+        calcular();
+        event.preventDefault();
+        return;
+    }
+
+    // Backspace permitido
+    if(tecla === "Backspace") return;
+
+    // Bloquear qualquer outra tecla
+    event.preventDefault();
+});
 </script>
 
 </body>
