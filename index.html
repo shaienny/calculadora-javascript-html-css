@@ -162,25 +162,25 @@ function calcular(){
     }
 }
 
-// SUPORTE AO TECLADO
+// SUPORTE COMPLETO AO TECLADO
 resultado.addEventListener("keydown", function(event){
 
     const tecla = event.key;
 
-    // Permitir números
+    // ENTER = IGUAL
+    if(tecla === "Enter"){
+        event.preventDefault();
+        calcular();
+        return;
+    }
+
+    // Permitir números (inclusive numpad)
     if(!isNaN(tecla)) return;
 
     // Permitir operadores
     if(["+", "-", "*", "/", "."].includes(tecla)) return;
 
-    // Enter calcula
-    if(tecla === "Enter"){
-        calcular();
-        event.preventDefault();
-        return;
-    }
-
-    // Backspace permitido
+    // Permitir backspace
     if(tecla === "Backspace") return;
 
     // Bloquear qualquer outra tecla
